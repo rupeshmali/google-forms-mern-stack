@@ -15,11 +15,11 @@ const Signup = () => {
             }
             {
                 (location.pathname === PATHS.SIGNUP.EMAIL) &&
-                <Email />
+                <Email role={'signup'}/>
             }
             {
                 (location.pathname === PATHS.SIGNUP.PASSWORD) &&
-                <Password />
+                <Password role={'signup'}/>
             }
         </div>
     )

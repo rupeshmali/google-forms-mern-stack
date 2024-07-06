@@ -39,7 +39,7 @@ const Navbar = () => {
                 <button className='px-3 flex items-center gap-2 hover:bg-slate-100 rounded'>
                     More tools <MdKeyboardArrowDown size={25} />
                 </button>
-                <button className='text-blue-500 px-4 hover:bg-blue-50 rounded' onClick={() => navigate(PATHS.SIGNIN)}>
+                <button className='text-blue-500 px-4 hover:bg-blue-50 rounded' onClick={() => navigate(PATHS.SIGNIN.INDEX)}>
                     Sign in
                 </button>
                 <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50'>

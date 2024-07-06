@@ -7,8 +7,8 @@ import ErrorMessage from './ErrorMessage';
 import { ERRORS } from '../../../utils/constants';
 import { FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 
-const Password = () => {
-    const { password, setPassword, handleSignUp } = useContext(AuthContext)
+const Password = ({ role }) => {
+    const { password, setPassword, handleSignUp, handleSignIn } = useContext(AuthContext)
     const [hasError, setHasError] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -39,47 +39,66 @@ const Password = () => {
             setErrorMessage(ERRORS.PASSWORD.STRONG)
             return;
         }
-        if (confirmPassword !== password) {
+        if (confirmPassword !== password && role==='signup') {
             setHasError(true)
             setErrorMessage(ERRORS.PASSWORD.MISMATCH)
             return;
         }
-        await handleSignUp();
+        if(role==='signup') await handleSignUp();
+        if(role==='signin') await handleSignIn();
+
     }
     return (
         <div className='flex flex-col gap-5'>
-            <div className='flex justify-between p-9 rounded-3xl bg-white h-[400px] w-[1040px]'>
-                <div className='flex flex-col gap-5'>
-                    <FcGoogle size={55} />
-                    <p className='text-4xl'>Create a strong password</p>
-                    <div>
-                        <p>
-                            To ensure the best security, create a password that includes
-                        </p>
-                        <p>
-                            a mix of uppercase and lowercase letters, numbers (0-9),
-                        </p>
-                        <p>
-                            and special characters like !@#$%^&
-                        </p>
-                    </div>
-                </div>
+            <div className='flex justify-between p-9 rounded-3xl bg-white w-[1040px]'>
+                {
+                    (role === 'signup') ?
+                        (<div className='flex flex-col gap-5'>
+                            <FcGoogle size={55} />
+                            <div className='text-4xl'>
+                                Create a strong password
+                            </div>
+                            <div>
+                                <p>
+                                    To ensure the best security, create a password that includes
+                                </p>
+                                <p>
+                                    a mix of uppercase and lowercase letters, numbers (0-9),
+                                </p>
+                                <p>
+                                    and special characters like !@#$%^&
+                                </p>
+                            </div>
+                        </div>
+                        ) : (
+                            <div className='flex flex-col gap-5'>
+                                <FcGoogle size={55} />
+                                <div className='text-4xl'>
+                                    <p>Almost there!</p>
+                                    <p>Just one more step to log in.</p>
+                                </div>
+                            </div>
+                        )
+                }
                 <div className='flex flex-col pt-10 gap-7'>
                     <div>
                         <ErrorMessage hasError={hasError} message={errorMessage} />
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <input onChange={handlePassword} type={showPassword ? 'text' : 'password'} placeholder='Password' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handlePassword} value={password} type={showPassword ? 'text' : 'password'} placeholder='Password' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
                         <div>
                             {
-                                password.length > 0 && (
+                                (password.length > 0 && role === 'signup') && (
                                     isPasswordStrong ?
                                         <div className='flex items-center gap-1 text-green-500 text-sm'><FaCheckCircle color='green' /> Strong</div> :
                                         <p className='flex items-center gap-1 text-yellow-500 text-sm'><FaExclamationTriangle color='orange' /> Weak</p>
                                 )
                             }
                         </div>
-                        <input onChange={handleConfirmPassword} type={showPassword ? 'text' : 'password'} placeholder='Confirm' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        {
+                            (role === 'signup') &&
+                            <input onChange={handleConfirmPassword} value={confirmPassword} type={showPassword ? 'text' : 'password'} placeholder='Confirm' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        }
                         <div className='flex gap-2 items-center'>
                             <input type="checkbox" name="" id="" className='' onChange={handleShowPassword} />
                             <label htmlFor="" className='text-sm'>Show password</label>
@@ -89,7 +108,7 @@ const Password = () => {
                     <div className='flex justify-end items-center'>
                         {/* <button className='text-blue-600 text-sm hover:bg-slate-100 px-5 py-3 rounded-3xl'>Create account</button> */}
                         <button className='bg-blue-600 hover:bg-blue-700 rounded-3xl px-6 py-3 text-white text-sm' onClick={handleSubmit}>
-                            Create Account
+                            {role === 'signin' ? 'Sign in' : 'Create Account'}
                         </button>
                     </div>
                 </div>

@@ -36,8 +36,8 @@ const Name = () => {
                 </div>
                 <div className='flex flex-col pt-20 gap-5'>
                     <div className='flex flex-col gap-5'>
-                        <input onChange={handleFirstName} type="text" placeholder='First Name' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
-                        <input onChange={handleLastName} type="text" placeholder='Last Name (optional)' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handleFirstName} value={firstName} type="text" placeholder='First Name' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handleLastName} value={lastName} type="text" placeholder='Last Name (optional)' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
                         <ErrorMessage hasError={hasError} message={ERRORS.NAME}/>
                     </div>
                     <div className='flex gap-5 justify-end items-center'>

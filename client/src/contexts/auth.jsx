@@ -1,8 +1,8 @@
-import { createContext, useState } from "react";
-import { signup } from "../api/auth";
+import { createContext, useEffect, useState } from "react";
+import { getMe, signin, signup } from "../api/auth";
 import { isAxiosError } from "axios";
 import Toast from "../components/common/Toast";
-import { PATHS, TOAST_TYPES } from "../utils/constants";
+import { ERRORS, PATHS, TOAST_TYPES } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -15,7 +15,8 @@ export const AuthProvider = ({ children }) => {
     const [password, setPassword] = useState('');
     const [toastMessage, setToastMessage] = useState('')
     const [toastType, setToastType] = useState('')
-
+    const [currentUser, setCurrentUser] = useState({});
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const handleToast = (type, message) => {
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     const handleSignUp = async () => {
         try {
             if (firstName === '' || email === '' || password === '') {
-                handleToast(TOAST_TYPES.FAILURE, 'Something went wrong. Please try again.')
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
                 return
             }
             const payload = {
@@ -39,31 +40,77 @@ export const AuthProvider = ({ children }) => {
                 password
             }
             const { data } = await signup(payload)
-            if (data.success) {
-                handleToast(TOAST_TYPES.SUCCESS, data.message);
-            }
+            handleToast(TOAST_TYPES.SUCCESS, data.message);
             navigate(PATHS.SIGNIN)
         } catch (error) {
             if (isAxiosError(error)) {
-                handleToast(TOAST_TYPES.FAILURE, 'Something went wrong. Please try again.')
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
             } else {
-                handleToast(TOAST_TYPES.FAILURE, 'Something went wrong. Please try again.')
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
             }
         }
     }
 
+    const handleSignIn = async () => {
+        try {
+            if (email === '' || password === '') {
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
+                return
+            }
+            const payload = {
+                email,
+                password
+            }
+            const { data } = await signin(payload);
+            localStorage.setItem('token', data.token)
+            handleToast(TOAST_TYPES.SUCCESS, data.message);
+            setCurrentUser(data.user)
+            // navigate(PATHS.DASHBOARD)
+            window.location.href = window.location.origin + PATHS.DASHBOARD;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
+            } else {
+                handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
+            }
+        }
+    }
+    const handleAuth = async () => {
+        try {
+            const item =   localStorage.getItem('token')
+            const { data } = await getMe();
+            setCurrentUser(data.user)
+        } catch (error) {
+            localStorage.removeItem('token')
+        }
+        setLoading(false);
+    }
     const values = {
         firstName,
         lastName,
         email,
         password,
+        currentUser,
         setFirstName,
         setLastName,
         setEmail,
         setPassword,
-        handleSignUp
+        handleSignUp,
+        handleSignIn
     }
-
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if(!token){
+            setLoading(false);
+            return;
+        }
+        handleAuth();
+    }, [])
+    if (loading) {
+        return <div className="h-screen flex items-center justify-center">
+            Loading...
+        </div>
+    }
     return (
         <AuthContext.Provider value={values}>
             {
