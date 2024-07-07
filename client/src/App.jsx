@@ -7,6 +7,7 @@ import { PATHS } from './utils/constants'
 import Login from './pages/Login'
 import { AuthContext, AuthProvider } from './contexts/auth'
 import Dashboard from './pages/Dashboard'
+import Layout from './components/protected/Layout'
 
 function App() {
   return (
@@ -21,7 +22,11 @@ function App() {
             <Route path={PATHS.SIGNUP.PASSWORD} element={<Signup />} />
             <Route path={PATHS.SIGNIN.INDEX} element={<Login />} />
             <Route path={PATHS.SIGNIN.PASSWORD} element={<Login />} />
-            <Route path={PATHS.DASHBOARD} element={<Dashboard />} />
+
+            <Route path={PATHS.DASHBOARD} element={<Layout />} >
+              <Route index element={<Dashboard />} />
+            </Route>
+            
           </Routes>
         </AuthProvider>
       </BrowserRouter>

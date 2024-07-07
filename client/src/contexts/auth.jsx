@@ -75,6 +75,10 @@ export const AuthProvider = ({ children }) => {
             }
         }
     }
+    const handleSignOut = () => {
+        localStorage.removeItem('token');
+        window.location.href = window.location.origin + PATHS.SIGNIN.INDEX;
+    }
     const handleAuth = async () => {
         try {
             const item =   localStorage.getItem('token')
@@ -96,7 +100,8 @@ export const AuthProvider = ({ children }) => {
         setEmail,
         setPassword,
         handleSignUp,
-        handleSignIn
+        handleSignIn,
+        handleSignOut
     }
     useEffect(() => {
         const token = localStorage.getItem('token')
