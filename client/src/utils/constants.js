@@ -10,7 +10,9 @@ export const PATHS = {
         INDEX: '/auth/signin/email',
         PASSWORD: '/auth/signin/password'
     },
-    DASHBOARD: '/forms'
+    DASHBOARD: '/forms',
+    FORM: '/forms/:id'
+    // NEW_FORM: '/forms/new' 
 }
 
 export const ERRORS = {

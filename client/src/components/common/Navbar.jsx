@@ -37,7 +37,7 @@ const Navbar = () => {
                             </p>
                         </div>
                     </div>
-                    <div className='flex items-center p-2'>
+                    <div className='flex items-center p-1'>
                         <input type="text" className='bg-slate-100 w-[700px] p-3 rounded-md' placeholder='Search'/>
                     </div>
                     <div className='flex gap-5 items-center p-2'>

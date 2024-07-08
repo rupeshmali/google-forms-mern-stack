@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Form" ALTER COLUMN "form_created" SET DEFAULT CURRENT_TIMESTAMP;

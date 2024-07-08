@@ -5,9 +5,10 @@ import Landing from './pages/Landing'
 import Navbar from './components/common/Navbar'
 import { PATHS } from './utils/constants'
 import Login from './pages/Login'
-import { AuthContext, AuthProvider } from './contexts/auth'
+import { AuthProvider } from './contexts/auth'
 import Dashboard from './pages/Dashboard'
 import Layout from './components/protected/Layout'
+import EditForm from './pages/EditForm'
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
             <Route path={PATHS.DASHBOARD} element={<Layout />} >
               <Route index element={<Dashboard />} />
             </Route>
-            
+
+            <Route path={PATHS.FORM} element={<EditForm />} />
+
           </Routes>
         </AuthProvider>
       </BrowserRouter>
