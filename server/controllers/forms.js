@@ -6,7 +6,6 @@ exports.create = async (req, res) => {
     try {
         console.log("Controller called for Form creation.");
         const { user_id } = req.body;
-        // const form = await prisma.form.
         const form = await prisma.form.create({
             data: {
                 form_title: 'Untitled form',
@@ -49,5 +48,32 @@ exports.getByUser = async (req, res) => {
             success: false,
             message: error.message
         })
+    }
+}
+
+exports.update = async (req, res) => {
+    const { id } = req.params;
+    const { form_title, form_description } = req.body;
+    console.log("Data received for Update: ", id, form_title, form_description);
+
+    try {
+      const updatedForm = await prisma.form.update({
+        where: { form_id: parseInt(id, 10) },
+        data: {
+          form_title: form_title || '',
+          form_description: form_description || ''
+        },
+      });
+      console.log("UPDATED FORM: ", updatedForm);
+      return res.status(200).json({
+        success: true,
+        updatedForm
+      });
+
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message
+      });
     }
 }
