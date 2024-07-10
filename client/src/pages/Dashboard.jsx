@@ -4,18 +4,18 @@ import { create } from '../api/form';
 import { useNavigate } from 'react-router-dom';
 import { PATHS } from '../utils/constants';
 import { useGetFormsForLoggedInUserQuery } from '../slices/formApi';
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { TiDocumentText } from "react-icons/ti";
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate()
-    
+
     const handleCreateForm = async () => {
         const payload = {
             user_id: currentUser.id
         }
         const { data } = await create(payload);
-        // navigate(PATHS.DASHBOARD + `/${data.form.form_id}`)
         window.location.href = window.origin + PATHS.DASHBOARD + `/${data.form.form_id}`
     }
 
@@ -35,11 +35,25 @@ const Dashboard = () => {
                     <p className='text-sm pl-1 text-black'>Blank form</p>
                 </div>
             </div>
-            <div className='pl-32 pt-5 gap-10 flex flex-col'>
+            <div className='pt-5 gap-10 flex flex-col px-32'>
                 Recent forms
-                <div className=' flex flex-col gap-5 w-[500px]'>
+                <div className='grid grid-cols-5 gap-5'>
                     {data.forms?.map((form) => {
-                        return <div className='bg-slate-300 p-5 rounded'>{form.form_id}       {form.form_title}        {form.user_id}</div>
+                        return (
+                            <div className='border border-slate-300 hover:border-purple-600 p-0 rounded h-[250px] w-[220px]' onClick={() => navigate(PATHS.DASHBOARD + `/${form.form_id}`)}>
+                                <div className='min-h-[180px] bg-purple-50 rounded border-slate-300 border-b rounded-none'></div>
+                                <div className='flex flex-col p-4'>
+                                    <div className='text-sm'>{form.form_title}</div>
+                                    <div className='flex justify-between items-center'>
+                                        <div className='flex gap-2 items-center'>
+                                            <TiDocumentText color='purple' size={25} />
+                                            <p className='text-sm text-slate-400'>Opened 6:24 pm</p>
+                                        </div>
+                                        <BsThreeDotsVertical />
+                                    </div>
+                                </div>
+                            </div>
+                        )
                     })}
                 </div>
             </div>

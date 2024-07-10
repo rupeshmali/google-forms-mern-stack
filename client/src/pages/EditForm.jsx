@@ -1,37 +1,43 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetFormsForLoggedInUserQuery, useUpdateFormMutation } from '../slices/formApi';
-import { IoMdAddCircleOutline } from "react-icons/io";
 import debounce from 'lodash.debounce'
+import Question from '../components/googleform/Question';
+import FloatingMenu from '../components/googleform/FloatingMenu';
 
 const EditForm = () => {
+
   const [formTitle, setFormTitle] = useState('')
   const [formDescription, setFormDescription] = useState('')
+  const [addQuestion, setAddQuestion] = useState(false);
+  const [floatingMenu, setFloatingMenu] = useState(true);
   const { data, error, isLoading } = useGetFormsForLoggedInUserQuery();
   const [updateForm] = useUpdateFormMutation();
   const params = useParams();
-  const currentForm = data?.forms?.filter((form) => Number(form.form_id) === Number(params.id))
 
   useEffect(() => {
-    if (currentForm) {
-      setFormTitle(currentForm[0].form_title)
-      setFormDescription(currentForm[0].form_description)
+    if (!isLoading && data) {
+      const currentForm = data.forms?.find((form) => Number(form.form_id) === Number(params.id));
+      if (currentForm) {
+        setFormTitle(currentForm.form_title);
+        setFormDescription(currentForm.form_description);
+      }
     }
-  }, [])
+  }, [data, isLoading, params.id]);
 
   const debouncedUpdateFormTitle = useCallback(
     debounce((newTitle) => {
       console.log("Inside debounce: ", newTitle);
       updateForm({ id: params.id, form_title: newTitle });
     }, 500),
-    []
+    [updateForm, params.id]
   );
   const debouncedUpdateFormDescription = useCallback(
     debounce((newDescription) => {
       console.log("Inside debounce: ", newDescription);
       updateForm({ id: params.id, form_description: newDescription });
     }, 500),
-    []
+    [updateForm, params.id]
   );
   const handleTitleChange = (e) => {
     const newTitle = e.target.value;
@@ -47,16 +53,18 @@ const EditForm = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div className='text-4xl text-red-600'>Error: {error.message}</div>;
 
-
   return (
     <div className='flex justify-center bg-purple-100 p-5 gap-5 h-svh'>
-      <div className='flex flex-col bg-white rounded-md shadow-md border-l-blue-500 border-l-[6px] border-t-purple-700 border-t-[12px] min-w-[800px] p-5 h-[180px]'>
-        <input type="text" placeholder='Form title' value={formTitle} className='text-4xl py-2 border-b-2 focus:border-black outline-none' onChange={handleTitleChange} />
-        <input type="text" placeholder='Form description' value={formDescription} className='text-sm pt-3 border-b-2 focus:border-black outline-none' onChange={handleDescriptionChange} />
+      <div className='flex flex-col gap-5'>
+        <div className='flex flex-col bg-white rounded-md shadow-md border-l-blue-500 border-l-[6px] border-t-purple-700 border-t-[12px] min-w-[800px] p-5 h-[180px]'>
+          <input type="text" placeholder='Form title' value={formTitle} className='text-4xl py-2 border-b-[1px] focus:border-black outline-none' onChange={handleTitleChange} />
+          <input type="text" placeholder='Form description' value={formDescription} className='text-sm pt-3 border-b-[1px] focus:border-black outline-none' onChange={handleDescriptionChange} />
+        </div>
+        {addQuestion && <Question />}
       </div>
-      <div className='min-w-5 bg-white h-[250px] rounded-md shadow-md p-2'>
-        <IoMdAddCircleOutline size={25} color='grey' />
-      </div>
+      {
+        floatingMenu &&  <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu}/>
+      } 
     </div>
   )
 }

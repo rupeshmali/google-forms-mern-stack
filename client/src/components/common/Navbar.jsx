@@ -14,7 +14,7 @@ import UserProfile from '../UserProfile';
 const Navbar = () => {
     const [displayUserProfileModal, setDisplayUserProfileModal] = useState(false);
     const { currentUser } = useContext(AuthContext);
-    console.log("currentUser from context: ", currentUser);
+    console.log({currentUser});
     const navigate = useNavigate();
     const location = useLocation();
     const handleUserProfileModal = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
     return (
         <div className='flex flex-row justify-between items-center font-sans text-stone-600 px-2 pb-1'>
             {
-                location.pathname === PATHS.DASHBOARD ? (<>
+                location.pathname === (PATHS.DASHBOARD || PATHS.FORM) && currentUser ? (<>
                     <div className='flex items-center p-3 gap-5'>
                         <div className='p-0 rounded-full hover:bg-slate-100'>
                             <FiMenu size={22} />

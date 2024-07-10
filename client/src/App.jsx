@@ -26,9 +26,9 @@ function App() {
 
             <Route path={PATHS.DASHBOARD} element={<Layout />} >
               <Route index element={<Dashboard />} />
+              <Route path={PATHS.FORM} element={<EditForm />} />
             </Route>
 
-            <Route path={PATHS.FORM} element={<EditForm />} />
 
           </Routes>
         </AuthProvider>
