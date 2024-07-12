@@ -20,7 +20,7 @@ const Dashboard = () => {
     }
 
     const { data, error, isLoading } = useGetFormsForLoggedInUserQuery();
-
+    console.log(data);
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
@@ -38,10 +38,10 @@ const Dashboard = () => {
             <div className='pt-5 gap-10 flex flex-col px-32'>
                 Recent forms
                 <div className='grid grid-cols-5 gap-5'>
-                    {data.forms?.map((form) => {
+                    {data.forms.forms.map((form) => {
                         return (
                             <div className='border border-slate-300 hover:border-purple-600 p-0 rounded h-[250px] w-[220px]' onClick={() => navigate(PATHS.DASHBOARD + `/${form.form_id}`)}>
-                                <div className='min-h-[180px] bg-purple-50 rounded border-slate-300 border-b rounded-none'></div>
+                                <div className='min-h-[180px] bg-purple-50 rounded border-slate-300 border-b'></div>
                                 <div className='flex flex-col p-4'>
                                     <div className='text-sm'>{form.form_title}</div>
                                     <div className='flex justify-between items-center'>

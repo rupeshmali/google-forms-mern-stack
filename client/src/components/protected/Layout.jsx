@@ -5,7 +5,6 @@ import { PATHS } from '../../utils/constants';
 
 const Layout = () => {
     const { currentUser } = useContext(AuthContext);
-    console.log("INSIDE LAYOUT: ", currentUser);
     if (!currentUser.email) {
         return <Navigate to={ PATHS.SIGNIN.INDEX } />
     }

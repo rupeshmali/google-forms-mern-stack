@@ -14,18 +14,16 @@ import UserProfile from '../UserProfile';
 const Navbar = () => {
     const [displayUserProfileModal, setDisplayUserProfileModal] = useState(false);
     const { currentUser } = useContext(AuthContext);
-    console.log({currentUser});
     const navigate = useNavigate();
     const location = useLocation();
     const handleUserProfileModal = () => {
-        console.log('Avatar clicked');
         setDisplayUserProfileModal(!displayUserProfileModal)
     }
 
     return (
         <div className='flex flex-row justify-between items-center font-sans text-stone-600 px-2 pb-1'>
-            {
-                location.pathname === (PATHS.DASHBOARD || PATHS.FORM) && currentUser ? (<>
+            { 
+                location.pathname.includes('/forms') && currentUser ? (<>
                     <div className='flex items-center p-3 gap-5'>
                         <div className='p-0 rounded-full hover:bg-slate-100'>
                             <FiMenu size={22} />
@@ -45,7 +43,7 @@ const Navbar = () => {
                             <TbGridDots size={20} />
                         </div>
                         <div onClick={handleUserProfileModal}>
-                            <InitialsAvatar name={currentUser.firtName + ' ' + currentUser.lastName} />
+                            <InitialsAvatar name={currentUser.firstName + ' ' + currentUser.lastName} bgColor="#4caf50" />
                             {
                                 displayUserProfileModal && <UserProfile />
                             }

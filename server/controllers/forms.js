@@ -30,12 +30,20 @@ exports.create = async (req, res) => {
 
 exports.getByUser = async (req, res) => {
     try {
-        const forms = await prisma.form.findMany({
-            where: {
-                user_id: req.currentUser.id
+        const forms = await prisma.user.findUnique({
+            where: { id: req.currentUser.id },
+            include: {
+              forms: {
+                include: {
+                  questions: {
+                    include: {
+                      options: true
+                    }
+                  }
+                }
+              }
             }
-        })
-        console.log("Forms found for user: ", forms);
+          });
         return res.status(200).json({
             success: true,
             forms
@@ -86,11 +94,49 @@ exports.update = async (req, res) => {
     }
 }
 
-exports.addQuestions = (req, res) => {
-    const { questions } = req.body;
-    try {
-        
-    } catch (error) {
+exports.addQuestion = async (req, res) => {
+    console.log("INSIDE ADDQUESTIONS");
+    const { id } = req.params;
+    const question = req.body;
 
+    try {
+        console.log("FORM ID received: ", id);
+        console.log("QUESTIONS body received in server side: ", JSON.stringify(question, null, 2));
+
+        const response = await prisma.$transaction(async (prisma) => {
+                if (!Array.isArray(question.options)) {
+                    throw new Error(`Options for question "${question.question}" are not an array`);
+                }
+
+                const createdQuestion = await prisma.question.create({
+                    data: {
+                        question_text: question.text,
+                        question_required: question.required,
+                        question_type: question.type,
+                        form_id: Number(id)
+                    },
+                });
+
+                for (const option of question.options) {
+                    await prisma.option.create({
+                        data: {
+                            option_text: option,
+                            question_id: createdQuestion.question_id,
+                        },
+                    });
+                }
+            }
+        );
+
+        return res.status(200).json({
+            success: true,
+            response
+        });
+    } catch (error) {
+        console.error("Error adding questions:", error.message);
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
     }
-}
+};

@@ -4,9 +4,11 @@ const prisma = new PrismaClient();
 
 exports.verifyUser = async (req, res, next) => {
     try {
+        console.log("Inside verifyUser MiddleWare");
         const authorization = req.headers['authorization']
         if (!authorization) {
             throw new Error("Invalid Token")
+            console.log("Invalid token");
         }
         const token = authorization.split(' ')[1]
         const { id } = jwt.verify(token, process.env.JWT_SECRET)
@@ -17,6 +19,7 @@ exports.verifyUser = async (req, res, next) => {
         })
         if (!user) {
             throw new Error('Invalid Token')
+            console.log("INVALID TOKEN");
         }
         req.currentUser = user;
         next();

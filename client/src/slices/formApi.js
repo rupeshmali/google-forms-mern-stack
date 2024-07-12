@@ -14,15 +14,21 @@ export const api = createApi({
         getFormsForLoggedInUser: builder.query({
             query: () => 'forms/user',
         }),
-        // Define a mutation endpoint to update a form
         updateForm: builder.mutation({
             query: ({ id, ...patch }) => ({
-                url: `forms/${id}`, // Specify the endpoint URL with the form ID
-                method: 'PATCH', // Specify the HTTP method
-                body: patch, // The body of the request, containing the updated data
+                url: `forms/${id}`, 
+                method: 'PATCH', 
+                body: patch, 
+            }),
+        }),
+        saveQuestion: builder.mutation({
+            query: ({ formId, question }) => ({
+                url: `forms/${formId}/question`,
+                method: 'POST',
+                body: question,
             }),
         }),
     }),
 });
 
-export const { useGetFormsForLoggedInUserQuery, useUpdateFormMutation } = api;
+export const { useGetFormsForLoggedInUserQuery, useUpdateFormMutation, useSaveQuestionMutation } = api;
