@@ -1,16 +1,26 @@
 import React from 'react'
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { IoMdAddCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 
-const FloatingMenu = ({ setAddQuestion, setFloatingMenu }) => {
+const FloatingMenu = ({ setAddQuestion, setFloatingMenu, icon }) => {
 
     const handleClick = () => {
-        setAddQuestion(true);
-        setFloatingMenu(false);
+        if (icon === 'close') {
+            setAddQuestion(false)
+            setFloatingMenu(true)
+        } else {
+            setAddQuestion(true);
+            setFloatingMenu(false);
+        }
     }
 
     return (
-        <div className='min-w-5 bg-white h-[250px] rounded-md shadow-md p-3'>
-            <IoMdAddCircleOutline size={25} color='black' onClick={handleClick} />
+        <div className='min-w-5 bg-white h-[250px]  rounded-md shadow-lg p-3 hover:shadow-gray-300'>
+            {
+                icon === 'add' && <IoMdAddCircleOutline size={25} color='black' onClick={handleClick} />
+            }
+            {
+                icon === 'close' && <IoMdCloseCircleOutline size={25} color='black' onClick={handleClick} />
+            }
         </div>
     )
 }

@@ -57,16 +57,23 @@ const EditForm = () => {
   return (
     <div className='flex justify-center bg-purple-100 p-5 gap-5 h-svh  overflow-y-auto max-h-screen'>
       <div className='flex flex-col gap-5'>
-        <div className='flex flex-col bg-white rounded-md shadow-md border-l-blue-500 border-l-[6px] border-t-purple-700 border-t-[12px] min-w-[800px] p-5 h-[180px]'>
-          <input type="text" placeholder='Form title' value={formTitle} className='text-4xl py-2 border-b-[1px] focus:border-black outline-none' onChange={handleTitleChange} />
-          <input type="text" placeholder='Form description' value={formDescription} className='text-sm pt-3 border-b-[1px] focus:border-black outline-none' onChange={handleDescriptionChange} />
+        <div className='flex flex-col bg-white rounded-md shadow-md border-l-blue-500 border-l-[6px] border-t-purple-700 border-t-[12px] max-w-[800px] min-w-[800px] p-5 h-[180px]'>
+          <input type="text" placeholder='Form title' value={formTitle} className='text-4xl py-2 border-b-[1px] focus:border-purple-800 focus:border-b-2 outline-none' onChange={handleTitleChange} />
+          <input type="text" placeholder='Form description' value={formDescription} className='text-sm pt-3 border-b-[1px] focus:border-purple-800 focus:border-b-2  outline-none' onChange={handleDescriptionChange} />
         </div>
-        {addQuestion && <Question />}
+        <div className='flex gap-5'>
+          <div>
+            {addQuestion && <Question />}
+          </div>
+          <div>
+            {addQuestion && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='close' />}
+          </div>
+        </div>
         {<Questions />}
       </div>
       {
-        floatingMenu &&  <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu}/>
-      } 
+        floatingMenu && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='add' />
+      }
     </div>
   )
 }

@@ -31,7 +31,7 @@ const Landing = () => {
                     <button className='bg-blue-600 px-7 py-3 rounded text-white hover:bg-blue-700'>
                         Try Forms for Work
                     </button>
-                    <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50'>
+                    <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50' onClick={() => navigate(PATHS.DASHBOARD)}>
                         Go to Forms
                     </button>
                 </div>

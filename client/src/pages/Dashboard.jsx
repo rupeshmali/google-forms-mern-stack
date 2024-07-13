@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { PATHS } from '../utils/constants';
 import { useGetFormsForLoggedInUserQuery } from '../slices/formApi';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { TiDocumentText } from "react-icons/ti";
+import { SiGoogleforms } from "react-icons/si";
+
 
 const Dashboard = () => {
     const { currentUser } = useContext(AuthContext);
@@ -42,12 +43,12 @@ const Dashboard = () => {
                         return (
                             <div className='border border-slate-300 hover:border-purple-600 p-0 rounded h-[250px] w-[220px]' onClick={() => navigate(PATHS.DASHBOARD + `/${form.form_id}`)}>
                                 <div className='min-h-[180px] bg-purple-50 rounded border-slate-300 border-b'></div>
-                                <div className='flex flex-col p-4'>
-                                    <div className='text-sm'>{form.form_title}</div>
+                                <div className='flex flex-col p-4 gap-1'>
+                                    <div className='text-sm pl-0.5'>{form.form_title}</div>
                                     <div className='flex justify-between items-center'>
                                         <div className='flex gap-2 items-center'>
-                                            <TiDocumentText color='purple' size={25} />
-                                            <p className='text-sm text-slate-400'>Opened 6:24 pm</p>
+                                            <SiGoogleforms color='purple' size={15} />
+                                            <p className='text-xs text-slate-400'>Opened 6:24 pm</p>
                                         </div>
                                         <BsThreeDotsVertical />
                                     </div>

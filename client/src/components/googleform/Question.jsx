@@ -73,10 +73,10 @@ const Question = () => {
 
     return (
         <div className='flex flex-col gap-5 items-center'>
-            <div className='flex flex-col justify-between gap-5 bg-white rounded-lg p-5  min-w-[800px]'>
+            <div className='flex flex-col justify-between gap-5 bg-white rounded-lg p-5  min-w-[800px] shadow-lg'>
                 <div className='flex flex-col gap-1'>
                     <div className='flex justify-between'>
-                        <input value={question.text} type="text" placeholder='Question' className='p-5 h-[60px] w-[500px] bg-slate-50 border-b-[1px] border-b-slate-600' onChange={(e) => handleQuestionChange(e)} />
+                        <input value={question.text} type="text" placeholder='Question' className='p-5 h-[60px] w-[500px] bg-slate-50 border-b-[1px] border-b-slate-600 outline-none focus:border-b-purple-800 focus:border-b-2' onChange={(e) => handleQuestionChange(e)} />
                         <select name="" id="" className='h-[50px] p-2 border rounded'>
                             <option value="Multiple Choice">Multiple Choice</option>
                         </select>
@@ -85,9 +85,9 @@ const Question = () => {
                         question.options.map((option, oIndex) => {
                             return (
                                 <div className='flex justify-between gap-0 items-center' key={oIndex}>
-                                    <div className='flex items-center gap-0'>
+                                    <div className='flex items-center gap-2'>
                                         <CgRadioCheck size={20} color='grey' />
-                                        <input className='outline-none px-2 py-0 h-[50px] w-[650px] hover:border-b-[1px]' value={option} type="text" placeholder='Option' onChange={(e) => handleOptionChange(oIndex, e)} />
+                                        <input className='outline-none  py-0 h-[50px] w-[650px] hover:border-b-[1px] focus:border-b-purple-800 focus:border-b-2' value={option} type="text" placeholder='Option' onChange={(e) => handleOptionChange(oIndex, e)} />
                                     </div>
                                     <div>
                                         <button className='hover:bg-slate-50 rounded-full p-2' onClick={() => handleRemoveOption(oIndex)}><IoCloseOutline size={28} color='grey' /></button>
@@ -118,12 +118,7 @@ const Question = () => {
                     <button className='bg-purple-700 px-5 py-2 rounded-lg text-white' onClick={handleSaveQuestion}>Add</button>
                 </div>
             </div>
-            {/* <div>
-                <button className='fixed right-20 bottom-20 rounded-full bg-white p-5 shadow-xl' onClick={handleAddNewQuestion}>
-                    <FaPlus size={30} color='#880ED4' />
-                </button>
-            </div> */}
-        </div >
+        </div>
     )
 }
 

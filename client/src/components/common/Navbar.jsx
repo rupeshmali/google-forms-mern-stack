@@ -10,6 +10,7 @@ import 'react-initials-avatar/lib/ReactInitialsAvatar.css';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import UserProfile from '../UserProfile';
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Navbar = () => {
     const [displayUserProfileModal, setDisplayUserProfileModal] = useState(false);
@@ -19,13 +20,15 @@ const Navbar = () => {
     const handleUserProfileModal = () => {
         setDisplayUserProfileModal(!displayUserProfileModal)
     }
-
+    if(location.pathname.includes('/auth')){
+        return <></>
+    }
     return (
-        <div className='flex flex-row justify-between items-center font-sans text-stone-600 px-2 pb-1'>
-            { 
+        <div className='flex flex-row justify-between items-center font-sans text-stone-600  pb-1 px-2'>
+            {
                 location.pathname.includes('/forms') && currentUser ? (<>
-                    <div className='flex items-center p-3 gap-5'>
-                        <div className='p-0 rounded-full hover:bg-slate-100'>
+                    <div className='flex items-center p-3 gap-3'>
+                        <div className='p-3 rounded-full hover:bg-slate-100'>
                             <FiMenu size={22} />
                         </div>
                         <div className='flex items-center gap-2'>
@@ -36,14 +39,20 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className='flex items-center p-1'>
-                        <input type="text" className='bg-slate-100 w-[700px] p-3 rounded-md' placeholder='Search'/>
+                        <div className='bg-slate-100 py-[13px] px-5 rounded-l-lg '>
+                            <AiOutlineSearch size={22}  />
+                        </div>
+                        <input type="text" className='bg-slate-100 w-[700px] pl-0 p-3 outline-none rounded-r-lg placeholder:text-gray-500' placeholder='Search' />
                     </div>
-                    <div className='flex gap-5 items-center p-2'>
-                        <div>
+                    <div className='flex gap-2 items-center '>
+                        <div className='p-4 hover:bg-slate-50 rounded-full' >
                             <TbGridDots size={20} />
                         </div>
-                        <div onClick={handleUserProfileModal}>
-                            <InitialsAvatar name={currentUser.firstName + ' ' + currentUser.lastName} bgColor="#4caf50" />
+                        <div onClick={handleUserProfileModal} className='pr-5'>
+                            <InitialsAvatar
+                                name={currentUser.firstName + ' ' + currentUser.lastName}
+                                className='bg-orange-600 rounded-full p-2 text-sm text-white hover:shadow-orange-600 shadow'
+                            />
                             {
                                 displayUserProfileModal && <UserProfile />
                             }
@@ -82,7 +91,7 @@ const Navbar = () => {
                         <button className='text-blue-500 px-4 hover:bg-blue-50 rounded' onClick={() => navigate(PATHS.SIGNIN.INDEX)}>
                             Sign in
                         </button>
-                        <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50'>
+                        <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50' onClick={()=> navigate(PATHS.DASHBOARD)}>
                             Go to Forms
                         </button>
                         <button className='bg-blue-600 px-7 py-3 rounded text-white hover:bg-blue-700'>
