@@ -12,12 +12,17 @@ const UserSubmissionForm = () => {
     const { data, error, isLoading } = useGetFormQuery(params.id);
     const [saveResponse, { isError }] = useSaveResponseMutation();
 
-    const handleInputChange = (questionId, e) => {
+    const handleInputChange = (questionId, questionText, e) => {
         setAnswers({
             ...answers,
-            [questionId]: e.target.id
+            [questionId]: {
+                questionText: questionText,
+                answerId: e.target.id,
+                answerText: e.target.value
+            }
         })
     }
+    console.log({answers});
     const handleSubmit = async () => {
         const requiredQuestions = data.form.questions.filter(question => question.question_required)
         if (requiredQuestions.length > 0 && Object.keys(answers).length === 0) {
@@ -29,7 +34,7 @@ const UserSubmissionForm = () => {
             .filter(questionId => !answers.hasOwnProperty(questionId));
 
         if (missingKeys.length > 0) {
-            setErrorMessage('Error: required questions are not answered. 45 line wala')
+            setErrorMessage('Error: required questions are not answered.')
             return;
         }
         const response = await saveResponse({
@@ -70,7 +75,7 @@ const UserSubmissionForm = () => {
                         <div className='flex flex-col gap-2' key={question.question_id} >
                             {question.options.map((option) => (
                                 <div className='flex gap-2'>
-                                    <input type="radio" id={option.option_id} name={question.question_id} value={option.option_text} onChange={(e) => handleInputChange(question.question_id, e)} />
+                                    <input type="radio" id={option.option_id} name={question.question_id} value={option.option_text} onChange={(e) => handleInputChange(question.question_id, question.question_text, e)} />
                                     <label for={option.option_id}>{option.option_text}</label>
                                 </div>
                             ))}

@@ -9,6 +9,7 @@ const Responses = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div className='text-4xl text-red-600'>Error: {error.message}</div>;
+    console.log({data});
     return (
         <div className='flex flex-col gap-10'>
             {
@@ -19,7 +20,7 @@ const Responses = () => {
                         <div>
                             {Object.entries(response.response_data).map(([key, value]) => (
                                 <div key={key}>
-                                    <strong>Question ID {key}:</strong> {value}
+                                    <strong> {value.questionText}:</strong> {value.answerText}
                                 </div>
                             ))}
                         </div>

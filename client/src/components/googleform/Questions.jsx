@@ -26,13 +26,13 @@ const Questions = () => {
             {
                 form.questions?.map((question, qIndex) => {
                     return (
-                        <div className='flex flex-col justify-between gap-2 bg-white rounded-lg p-5  min-w-[800px] max-w-[800px] shadow-sm'>
+                        <div className='flex flex-col justify-between gap-2 bg-white rounded-lg p-5  min-w-[800px] max-w-[800px] shadow-sm' key={question.question_id}>
                             <p>{question.question_text}</p>
 
                             {
                                 question.options.map((option, oIndex) => {
                                     return (
-                                        <div className='flex items-center gap-0'>
+                                        <div className='flex items-center gap-0' key={option.option_id}>
                                             <CgRadioCheck size={20} color='grey' />
                                             <input className='outline-none px-2 py-0 h-[50px] w-[650px]' value={option.option_text} type="text" placeholder='Option' />
                                         </div>
