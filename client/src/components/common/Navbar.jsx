@@ -5,28 +5,26 @@ import { PATHS } from '../../utils/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu } from "react-icons/fi";
 import { TbGridDots } from "react-icons/tb";
-import InitialsAvatar from 'react-initials-avatar';
-import 'react-initials-avatar/lib/ReactInitialsAvatar.css';
+
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import UserProfile from '../UserProfile';
 import { AiOutlineSearch } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import LoggedInUserAvatar from './LoggedInUserAvatar';
 
 const Navbar = () => {
-    const [displayUserProfileModal, setDisplayUserProfileModal] = useState(false);
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const handleUserProfileModal = () => {
-        setDisplayUserProfileModal(!displayUserProfileModal)
-    }
-    if(location.pathname.includes('/auth')){
+
+    if (location.pathname.includes('/auth') || location.pathname.includes('/submit') || location.pathname.match(/^\/forms\/(\d+)$/)) {
         return <></>
     }
     return (
         <div className='flex flex-row justify-between items-center font-sans text-stone-600  pb-1 px-2'>
             {
-                location.pathname.includes('/forms') && currentUser ? (<>
+                location.pathname === `${PATHS.DASHBOARD}` && currentUser ? (<>
                     <div className='flex items-center p-3 gap-3'>
                         <div className='p-3 rounded-full hover:bg-slate-100'>
                             <FiMenu size={22} />
@@ -40,7 +38,7 @@ const Navbar = () => {
                     </div>
                     <div className='flex items-center p-1'>
                         <div className='bg-slate-100 py-[13px] px-5 rounded-l-lg '>
-                            <AiOutlineSearch size={22}  />
+                            <AiOutlineSearch size={22} />
                         </div>
                         <input type="text" className='bg-slate-100 w-[700px] pl-0 p-3 outline-none rounded-r-lg placeholder:text-gray-500' placeholder='Search' />
                     </div>
@@ -48,15 +46,7 @@ const Navbar = () => {
                         <div className='p-4 hover:bg-slate-50 rounded-full' >
                             <TbGridDots size={20} />
                         </div>
-                        <div onClick={handleUserProfileModal} className='pr-5'>
-                            <InitialsAvatar
-                                name={currentUser.firstName + ' ' + currentUser.lastName}
-                                className='bg-orange-600 rounded-full p-2 text-sm text-white hover:shadow-orange-600 shadow'
-                            />
-                            {
-                                displayUserProfileModal && <UserProfile />
-                            }
-                        </div>
+                        <LoggedInUserAvatar />
                     </div>
                 </>
                 ) : (<><div className='flex items-center gap-6 pt-1'>
@@ -91,7 +81,7 @@ const Navbar = () => {
                         <button className='text-blue-500 px-4 hover:bg-blue-50 rounded' onClick={() => navigate(PATHS.SIGNIN.INDEX)}>
                             Sign in
                         </button>
-                        <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50' onClick={()=> navigate(PATHS.DASHBOARD)}>
+                        <button className='border px-7 py-3 rounded text-blue-600 hover:border-blue-600 hover:bg-blue-50' onClick={() => navigate(PATHS.DASHBOARD)}>
                             Go to Forms
                         </button>
                         <button className='bg-blue-600 px-7 py-3 rounded text-white hover:bg-blue-700'>

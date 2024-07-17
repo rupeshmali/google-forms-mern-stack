@@ -22,11 +22,11 @@ const Questions = () => {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className='flex flex-col gap-5 items-center'>
+        <div className='flex flex-col gap-5'>
             {
                 form.questions?.map((question, qIndex) => {
                     return (
-                        <div className='flex flex-col justify-between gap-2 bg-white rounded-lg p-5  min-w-[800px] shadow-sm'>
+                        <div className='flex flex-col justify-between gap-2 bg-white rounded-lg p-5  min-w-[800px] max-w-[800px] shadow-sm'>
                             <p>{question.question_text}</p>
 
                             {

@@ -8,7 +8,12 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
+    const [form, setForm] = useState({
+        firstName: '',
+        lastName: '',
+        email:'',
+        password:''
+    })
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -20,8 +25,11 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const handleToast = (type, message) => {
+        console.log("message: ", message);
+
         setToastType(type)
         setToastMessage(message)
+        console.log("toastMessage: ", toastMessage);
         setTimeout(() => {
             setToastMessage('');
         }, 5000)
@@ -41,8 +49,9 @@ export const AuthProvider = ({ children }) => {
             }
             const { data } = await signup(payload)
             handleToast(TOAST_TYPES.SUCCESS, data.message);
-            navigate(PATHS.SIGNIN)
+            navigate(PATHS.SIGNIN.INDEX)
         } catch (error) {
+            console.log('Came inside catch block of signUp', error.message);
             if (isAxiosError(error)) {
                 handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
             } else {

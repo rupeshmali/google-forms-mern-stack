@@ -20,6 +20,9 @@ app.use('/auth', authRouter)
 const formRouter = require('./routes/forms');
 app.use('/forms', verifyUser, formRouter)
 
+// form-response router
+const responseRouter = require('./routes/responses');
+app.use('/response', responseRouter)
 
 // listen on port number
 const port = process.env.PORT || 3000;

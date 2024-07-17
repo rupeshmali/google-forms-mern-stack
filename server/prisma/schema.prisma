@@ -8,22 +8,24 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  firstName  String
-  lastName   String
-  password   String
-  forms      Form[]
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  firstName String
+  lastName  String
+  password  String
+  forms     Form[]
 }
 
 model Form {
-  form_id           Int      @id @default(autoincrement())
-  form_title        String
-  form_created      DateTime @default(now())
-  form_description  String
-  user_id           Int
-  user              User     @relation(fields: [user_id], references: [id])
-  questions         Question[]             
+  form_id          Int        @id @default(autoincrement())
+  form_uuid        String     @unique
+  form_title       String
+  form_created     DateTime   @default(now())
+  form_description String
+  user_id          Int
+  user             User       @relation(fields: [user_id], references: [id])
+  questions        Question[]
+  responses        Response[]
 }
 
 model Question {
@@ -37,8 +39,15 @@ model Question {
 }
 
 model Option {
-  option_id         Int     @id @default(autoincrement())
-  option_text       String
-  question_id       Int
-  question          Question  @relation(fields: [question_id], references: [question_id])
+  option_id   Int      @id @default(autoincrement())
+  option_text String
+  question_id Int
+  question    Question @relation(fields: [question_id], references: [question_id])
+}
+
+model Response {
+  response_id Int  @id @default(autoincrement())
+  form_id     Int
+  response_data Json
+  form        Form @relation(fields: [form_id], references: [form_id])
 }

@@ -14,6 +14,9 @@ export const api = createApi({
         getFormsForLoggedInUser: builder.query({
             query: () => 'forms/user',
         }),
+        getForm: builder.query({
+            query: (formUuid) => `response/form/${formUuid}`,
+        }),
         updateForm: builder.mutation({
             query: ({ id, ...patch }) => ({
                 url: `forms/${id}`, 
@@ -27,8 +30,8 @@ export const api = createApi({
                 method: 'POST',
                 body: question,
             }),
-        }),
+        })
     }),
 });
 
-export const { useGetFormsForLoggedInUserQuery, useUpdateFormMutation, useSaveQuestionMutation } = api;
+export const { useGetFormsForLoggedInUserQuery, useGetFormQuery ,useUpdateFormMutation, useSaveQuestionMutation,  } = api;

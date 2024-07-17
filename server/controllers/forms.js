@@ -1,15 +1,18 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { v4: uuidv4 } = require('uuid');
 
 
 exports.create = async (req, res) => {
     try {
         const { user_id } = req.body;
+        const uuid = uuidv4();
         const form = await prisma.form.create({
             data: {
                 form_title: 'Untitled form',
                 form_description: '',
-                user_id: user_id
+                user_id: user_id,
+                form_uuid: uuid
             }
         })
 
@@ -58,25 +61,26 @@ exports.getByUser = async (req, res) => {
 
 exports.update = async (req, res) => {
     const { id } = req.params;
-    const { form_title, form_description } = req.body;
-
+    const { title, description } = req.body;
+    console.log("Came in update contoller.");
+    console.log("req. body received: ", req.body);
     try {
 
         let updatedForm;
-        if (form_title !== undefined && form_title.trim() !== '') {
+        if (title !== undefined && title.trim() !== '') {
             updatedForm = await prisma.form.update({
                 where: { form_id: parseInt(id, 10) },
                 data: {
-                    form_title: form_title || 'Untitled', // Only update the form_title field
+                    form_title: title || 'Untitled', 
                 },
             });
         }
 
-        if (form_description !== undefined && form_description.trim() !== '') {
+        if (description !== undefined && description.trim() !== '') {
             updatedForm = await prisma.form.update({
                 where: { form_id: parseInt(id, 10) },
                 data: {
-                    form_description: form_description || '',
+                    form_description: description || '',
                 },
             });
         }

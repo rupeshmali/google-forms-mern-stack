@@ -1,79 +1,76 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetFormsForLoggedInUserQuery, useUpdateFormMutation } from '../slices/formApi';
-import debounce from 'lodash.debounce'
+import { useGetFormsForLoggedInUserQuery } from '../slices/formApi';
 import FloatingMenu from '../components/googleform/FloatingMenu';
 import Questions from '../components/googleform/Questions';
 import Question from '../components/googleform/Question';
+import Responses from '../components/googleform/Responses';
+
+import FormHeader from '../components/googleform/FormHeader';
+import FormMenubar from '../components/googleform/FormMenubar';
 
 const EditForm = () => {
 
-  const [formTitle, setFormTitle] = useState('')
-  const [formDescription, setFormDescription] = useState('')
+  const [form, setForm] = useState({});
   const [addQuestion, setAddQuestion] = useState(false);
   const [floatingMenu, setFloatingMenu] = useState(true);
-  const { data, error, isLoading } = useGetFormsForLoggedInUserQuery();
-  const [updateForm] = useUpdateFormMutation();
+  const [showResponses, setShowResponses] = useState(false);
   const params = useParams();
+  const { data, error, isLoading } = useGetFormsForLoggedInUserQuery();
 
   useEffect(() => {
     if (!isLoading && data) {
-      const currentForm = data.forms.forms.find((form) => Number(form.form_id) === Number(params.id));
+      const currentForm = data.forms.forms.find((form) => form.form_id === Number(params.id));
+      console.log("currentForm: ", currentForm);
       if (currentForm) {
-        setFormTitle(currentForm.form_title);
-        setFormDescription(currentForm.form_description);
+        console.log("currentForm true, Came inside");
+        setForm({
+          title: currentForm.form_title,
+          description: currentForm.form_description,
+          uuid: currentForm.form_uuid
+        });
       }
     }
   }, [data, isLoading, params.id]);
-
-  const debouncedUpdateFormTitle = useCallback(
-    debounce((newTitle) => {
-      console.log("Inside debounce: ", newTitle);
-      updateForm({ id: params.id, form_title: newTitle });
-    }, 500),
-    [updateForm, params.id]
-  );
-  const debouncedUpdateFormDescription = useCallback(
-    debounce((newDescription) => {
-      console.log("Inside debounce: ", newDescription);
-      updateForm({ id: params.id, form_description: newDescription });
-    }, 500),
-    [updateForm, params.id]
-  );
-  const handleTitleChange = (e) => {
-    const newTitle = e.target.value;
-    setFormTitle(newTitle);
-    debouncedUpdateFormTitle(newTitle);
-  };
-  const handleDescriptionChange = (e) => {
-    const newDescription = e.target.value;
-    setFormDescription(newDescription);
-    debouncedUpdateFormDescription(newDescription);
-  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div className='text-4xl text-red-600'>Error: {error.message}</div>;
 
   return (
-    <div className='flex justify-center bg-purple-100 p-5 gap-5 h-svh  overflow-y-auto max-h-screen'>
-      <div className='flex flex-col gap-5'>
-        <div className='flex flex-col bg-white rounded-md shadow-md border-l-blue-500 border-l-[6px] border-t-purple-700 border-t-[12px] max-w-[800px] min-w-[800px] p-5 h-[180px]'>
-          <input type="text" placeholder='Form title' value={formTitle} className='text-4xl py-2 border-b-[1px] focus:border-purple-800 focus:border-b-2 outline-none' onChange={handleTitleChange} />
-          <input type="text" placeholder='Form description' value={formDescription} className='text-sm pt-3 border-b-[1px] focus:border-purple-800 focus:border-b-2  outline-none' onChange={handleDescriptionChange} />
+    <div className='flex flex-col'>
+      <FormMenubar form={form}/>
+      <div className='flex bg-white items-center justify-center w-screen gap-5'>
+        <div className='border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer' onClick={() => setShowResponses(false)}>Questions</div>
+        <div className='flex gap-3 border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer' onClick={() => setShowResponses(true)}>
+          Responses
+          <p className='text-white bg-purple-800 px-2 py-1 rounded-xl text-sm'>
+            1
+          </p>
         </div>
-        <div className='flex gap-5'>
-          <div>
-            {addQuestion && <Question />}
-          </div>
-          <div>
-            {addQuestion && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='close' />}
-          </div>
-        </div>
-        {<Questions />}
       </div>
-      {
-        floatingMenu && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='add' />
+
+      {showResponses ?
+        <Responses /> :
+
+        <div className='flex justify-center bg-purple-100 p-5 gap-5 h-svh  overflow-y-auto max-h-screen'>
+          <div className='flex flex-col gap-5'>
+            <FormHeader form={form} setForm={setForm} />
+            <Questions />
+            <div className='flex gap-5'>
+              <div>
+                {addQuestion && <Question />}
+              </div>
+              <div>
+                {addQuestion && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='close' />}
+              </div>
+            </div>
+          </div>
+          {
+            floatingMenu && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='add' />
+          }
+        </div>
       }
+
     </div>
   )
 }
