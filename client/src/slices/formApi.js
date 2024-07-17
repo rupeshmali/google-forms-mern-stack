@@ -17,6 +17,16 @@ export const api = createApi({
         getForm: builder.query({
             query: (formUuid) => `response/form/${formUuid}`,
         }),
+        getResponses: builder.query({
+            query: (formId) => `response/form/${formId}/answers`
+        }),
+        saveResponse: builder.mutation({
+            query: ({formId, answers}) => ({
+                url: `response/form/${formId}`,
+                method: 'POST',
+                body: {formId, answers},
+            })
+        }),
         updateForm: builder.mutation({
             query: ({ id, ...patch }) => ({
                 url: `forms/${id}`, 
@@ -34,4 +44,4 @@ export const api = createApi({
     }),
 });
 
-export const { useGetFormsForLoggedInUserQuery, useGetFormQuery ,useUpdateFormMutation, useSaveQuestionMutation,  } = api;
+export const { useGetFormsForLoggedInUserQuery, useGetFormQuery, useGetResponsesQuery, useSaveResponseMutation ,useUpdateFormMutation, useSaveQuestionMutation,  } = api;
