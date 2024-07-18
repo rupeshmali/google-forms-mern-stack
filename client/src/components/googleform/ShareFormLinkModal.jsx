@@ -11,9 +11,9 @@ const ShareFormLinkModal = ({ setSendBtnClicked, formUuId }) => {
                 </p>
                 <button onClick={() => setSendBtnClicked(false)}>X</button>
             </div>
-            <div className='flex gap-10 items-center border-b p-5'>
+            <div className='flex gap-10 items-center border-b border-t p-5 bg-slate-50'>
                 <p>Send via</p>
-                <div className='bg-purple-200 rounded-md p-2'>
+                <div className='bg-stone-200 rounded-md p-2'>
                     <IoLink size={20} />
                 </div>
             </div>

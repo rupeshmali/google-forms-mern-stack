@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetFormsForLoggedInUserQuery } from '../slices/formApi';
+import { useGetFormsForLoggedInUserQuery, useGetResponsesQuery } from '../slices/formApi';
 import FloatingMenu from '../components/googleform/FloatingMenu';
 import Questions from '../components/googleform/Questions';
 import Question from '../components/googleform/Question';
@@ -17,13 +17,13 @@ const EditForm = () => {
   const [showResponses, setShowResponses] = useState(false);
   const params = useParams();
   const { data, error, isLoading } = useGetFormsForLoggedInUserQuery();
+  const { data: resData, error: resError, isLoading: resLoading } = useGetResponsesQuery(params.id);
+
 
   useEffect(() => {
     if (!isLoading && data) {
       const currentForm = data.forms.forms.find((form) => form.form_id === Number(params.id));
-      console.log("currentForm: ", currentForm);
       if (currentForm) {
-        console.log("currentForm true, Came inside");
         setForm({
           title: currentForm.form_title,
           description: currentForm.form_description,
@@ -33,29 +33,27 @@ const EditForm = () => {
     }
   }, [data, isLoading, params.id]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div className='text-4xl text-red-600'>Error: {error.message}</div>;
+  if (isLoading || resLoading) return <div>Loading...</div>;
+  if (error || resError) return <div className='text-4xl text-red-600'>Error: {error.message}</div>;
 
   return (
     <div className='flex flex-col'>
-      <FormMenubar form={form}/>
+      <FormMenubar form={form} />
       <div className='flex bg-white items-center justify-center w-screen gap-5'>
-        <div className='border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer' onClick={() => setShowResponses(false)}>Questions</div>
-        <div className='flex gap-3 border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer' onClick={() => setShowResponses(true)}>
+        <div className={`${!showResponses && 'border-b-[3px] border-purple-800'} border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer text-sm`} onClick={() => setShowResponses(false)}>Questions</div>
+        <div className={`${showResponses && 'border-b-[3px] border-purple-800'} flex gap-3 border-b-[2px] border-white  hover:border-b-[3px] hover:border-purple-800 p-2 cursor-pointer text-sm`} onClick={() => setShowResponses(true)}>
           Responses
-          <p className='text-white bg-purple-800 px-2 py-1 rounded-xl text-sm'>
-            1
+          <p className='text-white bg-purple-800 px-1 rounded-xl text-sm'>
+            {resData.answers?.length}
           </p>
         </div>
       </div>
 
       {showResponses ?
-        <Responses /> :
-
+        <Responses data={resData} isLoading={resLoading} error={resError} /> :
         <div className='flex justify-center bg-purple-100 p-5 gap-5 h-svh  overflow-y-auto max-h-screen'>
           <div className='flex flex-col gap-5'>
             <FormHeader form={form} setForm={setForm} />
-            <Questions />
             <div className='flex gap-5'>
               <div>
                 {addQuestion && <Question />}
@@ -64,6 +62,7 @@ const EditForm = () => {
                 {addQuestion && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='close' />}
               </div>
             </div>
+            <Questions />
           </div>
           {
             floatingMenu && <FloatingMenu setAddQuestion={setAddQuestion} setFloatingMenu={setFloatingMenu} icon='add' />

@@ -5,10 +5,11 @@ import { SiGoogleforms } from "react-icons/si";
 import { BsEye } from "react-icons/bs";
 import LoggedInUserAvatar from '../common/LoggedInUserAvatar';
 import { PATHS } from '../../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 const FormMenubar = ({form}) => {
   const [sendBtnClicked, setSendBtnClicked] = useState(false);
-
+  const navigate = useNavigate();
     return (
         <>
             {

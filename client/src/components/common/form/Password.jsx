@@ -75,7 +75,7 @@ const Password = ({ role }) => {
                                 <FcGoogle size={55} />
                                 <div className='text-4xl'>
                                     <p>Almost there!</p>
-                                    <p>Just one more step to log in.</p>
+                                    <p>Just one more step to sign in.</p>
                                 </div>
                             </div>
                         )

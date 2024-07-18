@@ -8,7 +8,7 @@ import { TbGridDots } from "react-icons/tb";
 
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
-import UserProfile from '../UserProfile';
+import UserProfile from './UserProfile';
 import { AiOutlineSearch } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import LoggedInUserAvatar from './LoggedInUserAvatar';

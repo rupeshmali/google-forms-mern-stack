@@ -1,1 +1,6 @@
-.env
+# Node modules directories
+/node_modules
+/client/node_modules
+
+# Environment files
+/server/.env

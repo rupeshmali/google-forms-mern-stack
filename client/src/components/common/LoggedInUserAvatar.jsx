@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import UserProfile from '../UserProfile';
+import UserProfile from './UserProfile';
 import InitialsAvatar from 'react-initials-avatar';
 import 'react-initials-avatar/lib/ReactInitialsAvatar.css';
 import { AuthContext } from '../../contexts/auth';

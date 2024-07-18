@@ -36,17 +36,17 @@ exports.getByUser = async (req, res) => {
         const forms = await prisma.user.findUnique({
             where: { id: req.currentUser.id },
             include: {
-              forms: {
-                include: {
-                  questions: {
+                forms: {
                     include: {
-                      options: true
+                        questions: {
+                            include: {
+                                options: true
+                            }
+                        }
                     }
-                  }
                 }
-              }
             }
-          });
+        });
         return res.status(200).json({
             success: true,
             forms
@@ -71,7 +71,7 @@ exports.update = async (req, res) => {
             updatedForm = await prisma.form.update({
                 where: { form_id: parseInt(id, 10) },
                 data: {
-                    form_title: title || 'Untitled', 
+                    form_title: title || 'Untitled',
                 },
             });
         }
@@ -107,21 +107,26 @@ exports.addQuestion = async (req, res) => {
         console.log("FORM ID received: ", id);
         console.log("QUESTIONS body received in server side: ", JSON.stringify(question, null, 2));
 
+        if(question.text===''){
+            throw new Error('Question can not be blank.')
+        }
+
         const response = await prisma.$transaction(async (prisma) => {
-                if (!Array.isArray(question.options)) {
-                    throw new Error(`Options for question "${question.question}" are not an array`);
-                }
+            if (!Array.isArray(question.options)) {
+                throw new Error(`Options for question "${question.question}" are not an array`);
+            }
+            const createdQuestion = await prisma.question.create({
+                data: {
+                    question_text: question.text,
+                    question_required: question.required,
+                    question_type: question.type,
+                    form_id: Number(id)
+                },
+            });
 
-                const createdQuestion = await prisma.question.create({
-                    data: {
-                        question_text: question.text,
-                        question_required: question.required,
-                        question_type: question.type,
-                        form_id: Number(id)
-                    },
-                });
-
-                for (const option of question.options) {
+            for (const option of question.options) {
+                console.log("Contoller: option: ", option);
+                if (!(option === '')) {
                     await prisma.option.create({
                         data: {
                             option_text: option,
@@ -130,6 +135,7 @@ exports.addQuestion = async (req, res) => {
                     });
                 }
             }
+        }
         );
 
         return res.status(200).json({
