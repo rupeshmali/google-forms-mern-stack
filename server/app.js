@@ -25,6 +25,6 @@ app.use('/forms', verifyUser, formRouter)
 const responseRouter = require('./routes/responses');
 app.use('/response', responseRouter)
 
-// listen on port number
+// listen on port number 3000
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening at port ${port}`))
