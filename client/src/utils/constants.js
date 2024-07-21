@@ -1,15 +1,7 @@
 export const PATHS = {
     LANDING: '/',
-    SIGNUP: {
-        INDEX: '/auth/signup/name',
-        NAME: '/auth/signup/name',
-        EMAIL: '/auth/signup/email',
-        PASSWORD: '/auth/signup/password'
-    },
-    SIGNIN: {
-        INDEX: '/auth/signin/email',
-        PASSWORD: '/auth/signin/password'
-    },
+    SIGNUP: '/auth/signup/',
+    SIGNIN: '/auth/signin/',
     DASHBOARD: '/forms',
     FORM: '/forms/:id',
     USER_FORM_SUBMIT: '/form/:id/submit'

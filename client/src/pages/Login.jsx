@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Name from '../components/common/form/Name'
 import Email from '../components/common/form/Email'
 import { useLocation } from 'react-router-dom'
@@ -7,13 +7,20 @@ import Password from '../components/common/form/Password'
 
 const Login = () => {
   const location = useLocation();
+  const [currentStep, setCurrentStep] = useState('email');
+  const [form, setForm] = useState({
+      email: '',
+      password: ''
+  })
   return (
     <div className='bg-slate-100 min-h-screen min-w-screen flex items-center justify-center'>
       {
-        (location.pathname === PATHS.SIGNIN.INDEX) && <Email role='signin' />
+        currentStep === 'email' &&
+         <Email role='signin' form={form} setForm={setForm} setCurrentStep={setCurrentStep}/>
       }
       {
-        (location.pathname === PATHS.SIGNIN.PASSWORD) && <Password role='signin' />
+        currentStep === 'password' &&
+        <Password role='signin' form={form} setForm={setForm} setCurrentStep={setCurrentStep}/>
       }
     </div>
   )

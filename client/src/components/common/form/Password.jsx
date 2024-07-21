@@ -7,8 +7,8 @@ import ErrorMessage from './ErrorMessage';
 import { ERRORS } from '../../../utils/constants';
 import { FaExclamationTriangle, FaCheckCircle } from "react-icons/fa";
 
-const Password = ({ role }) => {
-    const { password, setPassword, handleSignUp, handleSignIn } = useContext(AuthContext)
+const Password = ({ role, setCurrentStep, form, setForm }) => {
+    const { handleSignUp, handleSignIn } = useContext(AuthContext)
     const [hasError, setHasError] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -19,7 +19,10 @@ const Password = ({ role }) => {
         if (isStrongPassword(e.target.value)) {
             setIsPasswordStrong(true)
         }
-        setPassword(e.target.value)
+        setForm({
+            ...form,
+            password: e.target.value
+        })
     }
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value)
@@ -29,25 +32,27 @@ const Password = ({ role }) => {
     }
     const handleSubmit = async () => {
         console.log("came in handleSubmit");
-        if (password === '') {
+        console.log(form);
+        if (form.password === '') {
             setHasError(true)
             setErrorMessage(ERRORS.PASSWORD.REQUIRED)
             return;
         }
-        if (!isStrongPassword(password)) {
+        if (!isStrongPassword(form.password)) {
             setHasError(true)
             setErrorMessage(ERRORS.PASSWORD.STRONG)
             return;
         }
-        if (confirmPassword !== password && role==='signup') {
+        if (confirmPassword !== form.password && role==='signup') {
             setHasError(true)
             setErrorMessage(ERRORS.PASSWORD.MISMATCH)
             return;
         }
         if(role==='signup') await handleSignUp();
-        if(role==='signin') await handleSignIn();
+        if(role==='signin') await handleSignIn(form.email, form.password);
 
     }
+    console.log("Password: ", form);
     return (
         <div className='flex flex-col gap-5'>
             <div className='flex justify-between p-9 rounded-3xl bg-white w-[1040px]'>
@@ -85,10 +90,10 @@ const Password = ({ role }) => {
                         <ErrorMessage hasError={hasError} message={errorMessage} />
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <input onChange={handlePassword} value={password} type={showPassword ? 'text' : 'password'} placeholder='Password' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handlePassword} value={form.password} type={showPassword ? 'text' : 'password'} placeholder='Password' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
                         <div>
                             {
-                                (password.length > 0 && role === 'signup') && (
+                                (form.password.length > 0 && role === 'signup') && (
                                     isPasswordStrong ?
                                         <div className='flex items-center gap-1 text-green-500 text-sm'><FaCheckCircle color='green' /> Strong</div> :
                                         <p className='flex items-center gap-1 text-yellow-500 text-sm'><FaExclamationTriangle color='orange' /> Weak</p>

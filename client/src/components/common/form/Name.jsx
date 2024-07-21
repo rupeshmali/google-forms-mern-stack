@@ -6,24 +6,29 @@ import { ERRORS, PATHS } from '../../../utils/constants';
 import { AuthContext } from '../../../contexts/auth';
 import ErrorMessage from './ErrorMessage';
 
-const Name = () => {
+const Name = ({ setCurrentStep, form, setForm }) => {
     const navigate = useNavigate()
-    const { firstName, setFirstName, lastName, setLastName, } = useContext(AuthContext);
+    // const { firstName, setFirstName, lastName, setLastName, } = useContext(AuthContext);
     const [hasError, setHasError] = useState(false)
     const handleFirstName = (e) => {
-        setFirstName(e.target.value);
+        setForm({
+            ...form,
+            firstName: e.target.value
+        });
     }
     const handleLastName = (e) => {
-        setLastName(e.target.value)
+        setForm({
+            ...form,
+            lastName: e.target.value
+        });
     }
     const handleSubmit = () => {
-        console.log(firstName);
-        if (firstName === '') {
+        if (form.firstName === '') {
             console.log("Please enter name");
             setHasError(true)
             return;
         }
-        navigate(PATHS.SIGNUP.EMAIL)
+        setCurrentStep('email')
     }
 
     return (
@@ -36,9 +41,9 @@ const Name = () => {
                 </div>
                 <div className='flex flex-col pt-20 gap-5'>
                     <div className='flex flex-col gap-5'>
-                        <input onChange={handleFirstName} value={firstName} type="text" placeholder='First Name' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
-                        <input onChange={handleLastName} value={lastName} type="text" placeholder='Last Name (optional)' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
-                        <ErrorMessage hasError={hasError} message={ERRORS.NAME}/>
+                        <input onChange={handleFirstName} value={form.firstName} type="text" placeholder='First Name' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handleLastName} value={form.lastName} type="text" placeholder='Last Name (optional)' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <ErrorMessage hasError={hasError} message={ERRORS.NAME} />
                     </div>
                     <div className='flex gap-5 justify-end items-center'>
                         {/* <button className='text-blue-600 text-sm hover:bg-slate-100 px-5 py-3 rounded-3xl'>Create account</button> */}

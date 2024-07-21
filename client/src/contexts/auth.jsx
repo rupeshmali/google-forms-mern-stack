@@ -16,8 +16,8 @@ export const AuthProvider = ({ children }) => {
     // })
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
     const [toastMessage, setToastMessage] = useState('')
     const [toastType, setToastType] = useState('')
     const [currentUser, setCurrentUser] = useState({});
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const handleSignIn = async () => {
+    const handleSignIn = async (email, password) => {
         try {
             if (email === '' || password === '') {
                 handleToast(TOAST_TYPES.FAILURE, ERRORS.SOMETHING_WENT_WRONG)
@@ -101,13 +101,13 @@ export const AuthProvider = ({ children }) => {
     const values = {
         firstName,
         lastName,
-        email,
-        password,
+        // email,
+        // password,
         currentUser,
         setFirstName,
         setLastName,
-        setEmail,
-        setPassword,
+        // setEmail,
+        // setPassword,
         handleSignUp,
         handleSignIn,
         handleSignOut

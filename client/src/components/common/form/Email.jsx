@@ -7,21 +7,22 @@ import { AuthContext } from '../../../contexts/auth';
 import { isValidEmail } from '../../../utils/auth';
 import ErrorMessage from './ErrorMessage';
 
-const Email = ({ role }) => {
-    const navigate = useNavigate()
-    const { email, setEmail } = useContext(AuthContext)
+const Email = ({ role, setCurrentStep, form, setForm }) => {
     const [hasError, setHasError] = useState(false)
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
-        setEmail(e.target.value)
+        setForm({
+            ...form,
+            email: e.target.value
+        })
     }
     const handleSubmit = () => {
-        if (!isValidEmail(email)) {
+        if (!isValidEmail(form.email)) {
             setHasError(true)
             return;
         }
-
-        navigate(role === 'signin' ? PATHS.SIGNIN.PASSWORD : PATHS.SIGNUP.PASSWORD)
+        setCurrentStep('password')
     }
 
     return (
@@ -36,7 +37,7 @@ const Email = ({ role }) => {
                 </div>
                 <div className='flex flex-col pt-20 gap-10'>
                     <div className='flex flex-col gap-2'>
-                        <input onChange={handleChange} value={email} type="text" placeholder='Email' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
+                        <input onChange={handleChange} value={form.email} type="text" placeholder='Email' className='border-stone-900 border w-[450px] rounded px-4 py-4 placeholder:text-slate-700' />
                         {/* <a className='text-blue-600 text-sm font-semibold'>Forgot email?</a> */}
                         <ErrorMessage hasError={hasError} message={ERRORS.EMAIL} />
                     </div>

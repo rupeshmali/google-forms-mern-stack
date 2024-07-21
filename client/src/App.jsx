@@ -21,11 +21,11 @@ function App() {
             {/* LANDING PAGE */}
             <Route path={PATHS.LANDING} element={<Landing />} />
             {/* AUTH PAGES */}
-            <Route path={PATHS.SIGNUP.INDEX} element={<Signup />} />
-            <Route path={PATHS.SIGNUP.EMAIL} element={<Signup />} />
-            <Route path={PATHS.SIGNUP.PASSWORD} element={<Signup />} />
-            <Route path={PATHS.SIGNIN.INDEX} element={<Login />} />
-            <Route path={PATHS.SIGNIN.PASSWORD} element={<Login />} />
+            <Route path={PATHS.SIGNUP} element={<Signup />} />
+            {/* <Route path={PATHS.SIGNUP.EMAIL} element={<Signup />} />
+            <Route path={PATHS.SIGNUP.PASSWORD} element={<Signup />} /> */}
+            <Route path={PATHS.SIGNIN} element={<Login />} />
+            {/* <Route path={PATHS.SIGNIN.PASSWORD} element={<Login />} /> */}
             {/* CREATE and DISPLAY FORMS */}
             <Route path={PATHS.DASHBOARD} element={<Layout />} >
               <Route index element={<Dashboard />} />

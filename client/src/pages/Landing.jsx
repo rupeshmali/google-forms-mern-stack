@@ -8,16 +8,16 @@ const Landing = () => {
     return (
         <div className='flex justify-between items-center px-20 py-20'>
             <div className='flex flex-col gap-8'>
-                <div className='flex flex-col gap-3'>
-                    <div className='text-6xl'>
-                        Get insights
-                    </div>
-                    <div className='text-6xl'>
-                        quickly, with
-                    </div>
-                    <div className='text-6xl'>
-                        Google Forms
-                    </div>
+                <div className='flex flex-col gap-3 text-6xl max-w-[400px] leading-[75px]'>
+                    {/* <div className='text-6xl'> */}
+                        Get insights quickly, with Google Forms
+                    {/* </div> */}
+                    {/* <div className='text-6xl'> */}
+                       
+                    {/* </div> */}
+                    {/* <div className='text-6xl'> */}
+                        
+                    {/* </div> */}
                 </div>
                 <div className='text-xl text-slate-500'>
                     <p>
