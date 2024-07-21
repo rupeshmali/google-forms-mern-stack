@@ -18,6 +18,7 @@ app.use('/auth', authRouter)
 
 // form router
 const formRouter = require('./routes/forms');
+// Edited from branch 1
 app.use('/forms', verifyUser, formRouter)
 
 // form-response router
